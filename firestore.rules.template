@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Function to check if the user is an admin
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Function to check if user is a participant in a conversation
+    function isParticipant(conversationId) {
+      let conv = get(/databases/$(database)/documents/conversations/$(conversationId)).data;
+      return request.auth.uid in conv.participantIds || request.auth.uid == conv.buyerId || request.auth.uid == conv.dealerId;
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == userId || isAdmin();
+    }
+
+    match /dealers/{dealerId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == dealerId || isAdmin();
+    }
+    
+    match /user_status/{userId} {
+    	allow read: if request.auth != null;
+      allow write: if request.auth.uid == userId || isAdmin();
+    }
+
+    // CONVERSATIONS
+    match /conversations/{conversationId} {
+      // Anyone involved in the conversation or an admin can read it
+      allow read: if request.auth != null && (
+        request.auth.uid == resource.data.buyerId || 
+        request.auth.uid == resource.data.dealerId || 
+        (resource.data.participantIds != null && request.auth.uid in resource.data.participantIds) ||
+        isAdmin()
+      );
+      
+      // Creating a new conversation requires the user to be one of the participants
+      allow create: if request.auth != null && (
+        request.auth.uid == request.resource.data.buyerId || 
+        request.auth.uid == request.resource.data.dealerId ||
+        isAdmin()
+      );
+      
+      // Updating a conversation (e.g. for unread counts) requires participant or admin access
+      allow update: if request.auth != null && (
+        request.auth.uid == resource.data.buyerId || 
+        request.auth.uid == resource.data.dealerId || 
+        (resource.data.participantIds != null && request.auth.uid in resource.data.participantIds) ||
+        isAdmin()
+      );
+      
+      allow delete: if isAdmin();
+    }
+
+    // MESSAGES
+    match /messages/{messageId} {
+      // Must be a participant of the parent conversation to read the message
+      allow read: if request.auth != null && (isParticipant(resource.data.conversationId) || isAdmin());
+      
+      // Can only send messages as yourself
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.senderId &&
+        (isParticipant(request.resource.data.conversationId) || isAdmin());
+        
+      // Updates usually limited to read receipts
+      allow update: if request.auth != null && (isParticipant(resource.data.conversationId) || isAdmin());
+      
+      allow delete: if isAdmin();
+    }
+
+    // Default catch-all (be careful with this in production)
+    match /{document=**} {
+      allow read, write: if request.auth != null && isAdmin();
+    }
+  }
+}
