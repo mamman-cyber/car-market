@@ -1,16 +1,32 @@
-# React + Vite
+# Car Market — Online Vehicle Marketplace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Car Market is a modern web-based vehicle marketplace that connects car buyers and dealers through an interactive and user-friendly platform. The application allows users to browse vehicles, explore dealer stores, and communicate directly with sellers via a real-time chat system.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🔎 Car Listings
+- Browse available vehicles with detailed specifications
+- View images, prices, and vehicle descriptions
 
-## React Compiler
+### 🏪 Dealer Stores
+- Each dealer has a dedicated store page
+- Buyers can explore cars listed by specific dealers
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 💬 Real-Time Chat System
+- Buyers can chat directly with dealers
+- Messages appear instantly on the dealer dashboard
+- Store-specific conversations for better communication
 
-## Expanding the ESLint configuration
+### 👤 User Roles
+- Buyer accounts
+- Dealer/store owner accounts
+- Personalized dashboards
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 📱 Responsive Design
+- Works smoothly on desktop, tablet, and mobile devices
+
+## 🎯 Project Goal
+The goal of this project is to create a seamless digital marketplace where vehicle transactions become easier through transparent listings and direct buyer–dealer communication.
+
+## 📌 Status
+🚧 Project in active development.
