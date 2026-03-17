@@ -26,3 +26,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Dev files
+TODO*.md
+ERROR_REPORT.md
+CLICK_TO_START.bat
+*.bat
+DEPLOYMENT_READINESS.md
